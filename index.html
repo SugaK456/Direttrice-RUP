@@ -155,7 +155,7 @@
         </div>
 
         <div id="guestsSection" class="hidden">
-            <button class="back-btn" onclick="tornaHome()">⬅️ Torna al Menu Principale</button>
+            <button class="back-btn" onclick="tornaHome()">⬅️️ Torna al Menu Principale</button>
             <div class="card">
                 <h2 class="section-title" style="color: var(--guest-color);">👥 Registro Ospiti in Struttura</h2>
                 <div id="ospitiTableContainer"><p>Caricamento ospiti...</p></div>
@@ -163,7 +163,7 @@
         </div>
 
         <div id="residentsSection" class="hidden">
-            <button class="back-btn" onclick="tornaHome()">⬅️️ Torna al Menu Principale</button>
+            <button class="back-btn" onclick="tornaHome()">⬅️ Torna al Menu Principale</button>
             <div class="card">
                 <h2 class="section-title" style="color: var(--accent);">🚪 Gestione Residenti (Presenze & Assenze)</h2>
                 
@@ -242,40 +242,45 @@
 
         async function caricaResidentiEAssenze() {
             const container = document.getElementById('residentiTableContainer');
+            container.innerHTML = `<p style="font-size: 0.85rem; color: #64748B;">Caricamento dati residenti...</p>`;
 
-            const resResidenti = await supabaseClient.from('residenti').select('*');
-            if (resResidenti.error) {
-                container.innerHTML = `<div class="alert-box">Errore lettura residenti: ${resResidenti.error.message}</div>`;
-                return;
-            }
-            const residenti = resResidenti.data || [];
-            
-            if (residenti.length === 0) {
-                container.innerHTML = `<div class="alert-box">Nessun residente trovato nel database.</div>`;
-                return;
-            }
+            try {
+                const resResidenti = await supabaseClient.from('residenti').select('*');
+                if (resResidenti.error) {
+                    throw new Error("Errore tabella residenti: " + resResidenti.error.message);
+                }
+                const residenti = resResidenti.data || [];
+                
+                if (residenti.length === 0) {
+                    container.innerHTML = `<div class="alert-box">Nessun residente trovato nel database.</div>`;
+                    return;
+                }
 
-            const resAssenze = await supabaseClient.from('assenze').select('*');
-            const assenze = resAssenze.data || [];
-            const oraCorrente = new Date();
+                const resAssenze = await supabaseClient.from('assenze').select('*');
+                const assenze = resAssenze.error ? [] : (resAssenze.data || []);
+                const oraCorrente = new Date();
 
-            datiUnificatiCache = residenti.map(res => {
-                const nomeCompleto = `${res.nome || ''} ${res.cognome || ''}`.trim();
-                const assenzaAttiva = assenze.find(a => {
-                    if(!a.inizio || !a.fine) return false;
-                    let inizio = new Date(a.inizio); let fine = new Date(a.fine);
-                    let okStanza = String(a.stanza).trim() === String(res.stanza).trim();
-                    return okStanza && oraCorrente >= inizio && oraCorrente <= fine;
+                datiUnificatiCache = residenti.map(res => {
+                    const nomeCompleto = `${res.nome || ''} ${res.cognome || ''}`.trim();
+                    const assenzaAttiva = assenze.find(a => {
+                        if(!a.inizio || !a.fine) return false;
+                        let inizio = new Date(a.inizio); let fine = new Date(a.fine);
+                        let okStanza = String(a.stanza).trim() === String(res.stanza).trim();
+                        return okStanza && oraCorrente >= inizio && oraCorrente <= fine;
+                    });
+                    return {
+                        stanza: res.stanza, nome: nomeCompleto,
+                        isAssente: !!assenzaAttiva,
+                        inizioAssenza: assenzaAttiva ? assenzaAttiva.inizio : null,
+                        fineAssenza: assenzaAttiva ? assenzaAttiva.fine : null
+                    };
                 });
-                return {
-                    stanza: res.stanza, nome: nomeCompleto,
-                    isAssente: !!assenzaAttiva,
-                    inizioAssenza: assenzaAttiva ? assenzaAttiva.inizio : null,
-                    fineAssenza: assenzaAttiva ? assenzaAttiva.fine : null
-                };
-            });
-            datiUnificatiCache.sort((a, b) => String(a.stanza).localeCompare(String(b.stanza), undefined, {numeric: true}));
-            applicaFiltriResidenti();
+                datiUnificatiCache.sort((a, b) => String(a.stanza).localeCompare(String(b.stanza), undefined, {numeric: true}));
+                applicaFiltriResidenti();
+
+            } catch (err) {
+                container.innerHTML = `<div class="alert-box">⚠️ ${err.message}</div>`;
+            }
         }
 
         function impostaFiltro(tipo) {
@@ -293,7 +298,7 @@
                 const matchTesto = item.nome.toLowerCase().includes(query) || String(item.stanza).toLowerCase().includes(query);
                 let matchStato = true;
                 if (filtroCorrente === 'presenti') matchStato = !item.isAssente;
-                if (filtroColrente === 'assenti') matchStato = item.isAssente; // fixed typo check below
+                if (filtroCorrente === 'assenti') matchStato = item.isAssente;
                 return matchTesto && matchStato;
             });
             mostraTabellaResidenti(filtrate);
