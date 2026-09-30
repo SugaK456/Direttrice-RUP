@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RUP - Portale Direzione Preziosina</title>
     
-    <!-- ========================================== -->
-    <!-- CONFIGURAZIONE WIDGET / APP DIREZIONE      -->
-    <!-- ========================================== -->
+    <!-- CONFIGURAZIONE WIDGET / APP DIREZIONE -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#22334C">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,7 +13,6 @@
     <meta name="apple-mobile-web-app-title" content="RUP Direzione">
     <link rel="apple-touch-icon" href="icona-direzione.jpg">
     <link rel="icon" type="image/jpeg" href="icona-direzione.jpg">
-    <!-- ========================================== -->
 
     <!-- Supabase Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -32,98 +29,41 @@
             --success: #10B981;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .app-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 24px 20px;
-            text-align: center;
-            border-bottom: 4px solid var(--accent);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        .app-header { background-color: var(--primary); color: white; padding: 24px 20px; text-align: center; border-bottom: 4px solid var(--accent); }
         .app-header h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
         .app-header p { font-size: 0.8rem; color: #94A3B8; text-transform: uppercase; }
-
         .main-container { max-width: 950px; width: 100%; margin: 20px auto; padding: 0 10px; flex: 1; }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #E2E8F0;
-            margin-bottom: 25px;
-        }
-
-        @media(min-width: 768px) {
-            .card { padding: 24px; }
-            .app-header h1 { font-size: 1.4rem; }
-        }
-
+        .card { background: var(--card-bg); border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #E2E8F0; margin-bottom: 25px; }
+        @media(min-width: 768px) { .card { padding: 24px; } }
         .section-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
-
         .home-menu { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
         @media (min-width: 600px) { .home-menu { grid-template-columns: 1fr 1fr; gap: 20px; } }
-
-        .menu-card {
-            background: white; border: 2px solid #E2E8F0; border-radius: 12px;
-            padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.2s;
-        }
+        .menu-card { background: white; border: 2px solid #E2E8F0; border-radius: 12px; padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .menu-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
         .menu-card.guests { border-color: var(--guest-color); }
         .menu-card.guests h3 { color: var(--guest-color); margin-bottom: 8px; font-size: 1.05rem; }
         .menu-card.residents { border-color: var(--accent); }
         .menu-card.residents h3 { color: var(--accent); margin-bottom: 8px; font-size: 1.05rem; }
         .menu-card p { font-size: 0.85rem; color: #64748B; }
-
         .controls-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .search-bar { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 0.9rem; }
-        .search-bar:focus { border-color: var(--accent); }
         .filter-buttons { display: flex; gap: 6px; width: 100%; }
         @media(min-width: 500px) { .filter-buttons { width: auto; } }
-        
         .btn-filter { flex: 1; padding: 10px 12px; background: #F1F5F9; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--primary); cursor: pointer; text-align: center; }
         .btn-filter.active { background: var(--accent); color: white; border-color: var(--accent); }
-
         .back-btn { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 0.9rem; margin-bottom: 15px; display: inline-flex; gap: 6px; align-items: center; }
-        .back-btn:hover { text-decoration: underline; }
-
-        /* CONTENITORE TABELLA RESPONSIVE PER SMARTPHONE */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-radius: 8px;
-            border: 1px solid #E2E8F0;
-        }
-
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid #E2E8F0; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; white-space: nowrap; }
         @media(min-width: 768px) { table { font-size: 0.9rem; white-space: normal; } }
-
         th, td { padding: 12px 10px; border-bottom: 1px solid #E2E8F0; }
         th { background-color: #F8FAFC; color: var(--primary); font-weight: 600; }
         tr:hover { background-color: #F8FAFC; }
         tr.alert-row { background-color: #FEF2F2 !important; border-left: 4px solid var(--danger); }
-
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
         .badge-danger { background: #FEE2E2; color: #991B1B; }
         .badge-success { background: #D1E7DD; color: #0F5132; }
-
         .hidden { display: none; }
         .alert-box { padding: 12px; background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; border-radius: 6px; font-size: 0.9rem; margin-bottom: 15px; }
     </style>
@@ -155,7 +95,7 @@
         </div>
 
         <div id="guestsSection" class="hidden">
-            <button class="back-btn" onclick="tornaHome()">⬅️️ Torna al Menu Principale</button>
+            <button class="back-btn" onclick="tornaHome()">⬅️ Torna al Menu Principale</button>
             <div class="card">
                 <h2 class="section-title" style="color: var(--guest-color);">👥 Registro Ospiti in Struttura</h2>
                 <div id="ospitiTableContainer"><p>Caricamento ospiti...</p></div>
@@ -175,7 +115,7 @@
                         <button class="btn-filter" id="btnAssenti" onclick="impostaFiltro('assenti')">Assenti</button>
                     </div>
                 </div>
-                <div id="residentiTableContainer"><p>Caricamento dati residenti...</p></div>
+                <div id="residentiTableContainer"><p>Caricamento dati residenti in corso...</p></div>
             </div>
         </div>
 
@@ -190,6 +130,7 @@
         let filtroCorrente = 'tutti';
 
         document.addEventListener('DOMContentLoaded', () => {
+            console.log("Inizializzazione Supabase...");
             supabaseClient = supabase.createClient(SUPA_URL, SUPA_KEY);
             caricaOspitiDirezione();
             caricaResidentiEAssenze();
@@ -210,52 +151,56 @@
 
         async function caricaOspitiDirezione() {
             const container = document.getElementById('ospitiTableContainer');
-            const { data, error } = await supabaseClient.from('ospiti_preziosina').select('*').order('created_at', { ascending: false });
+            try {
+                const { data, error } = await supabaseClient.from('ospiti_preziosina').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
 
-            if (error) {
-                container.innerHTML = `<p style="color:var(--danger); font-size:0.85rem;">Nessun ospite registrato o tabella non trovata.</p>`;
-                return;
+                if (!data || data.length === 0) {
+                    container.innerHTML = `<p style="font-size: 0.85rem; color: #64748B;">Nessun ospite registrato al momento.</p>`;
+                    return;
+                }
+
+                let html = `<div class="table-responsive"><table><thead><tr><th>Studente</th><th>Stanza</th><th>Ospite</th><th>Documento</th><th>Ingresso</th><th>Uscita</th></tr></thead><tbody>`;
+                const oraCorrente = new Date();
+
+                data.forEach(ospite => {
+                    let senzaUscita = !ospite.orario_uscita_previsto;
+                    if (!senzaUscita && new Date(ospite.orario_uscita_previsto) < oraCorrente) senzaUscita = true;
+
+                    let dIngresso = new Date(ospite.created_at).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
+                    let dUscita = ospite.orario_uscita_previsto ? new Date(ospite.orario_uscita_previsto).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' }) : '<span class="badge badge-danger">Verificare</span>';
+
+                    html += `<tr class="${senzaUscita ? 'alert-row' : ''}">
+                        <td><strong>${ospite.residente_nome || 'N/A'}</strong></td><td>St. ${ospite.residente_stanza || 'N/A'}</td>
+                        <td>${ospite.nome || ''} ${ospite.cognome || ''}</td><td><small>${ospite.tipo_documento || 'N/A'}<br><b>${ospite.numero_documento || 'N/A'}</b></small></td>
+                        <td>${dIngresso}</td><td>${dUscita}</td></tr>`;
+                });
+                html += `</tbody></table></div>`;
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = `<div class="alert-box">Errore Ospiti: ${err.message}</div>`;
             }
-            if (!data || data.length === 0) {
-                container.innerHTML = `<p style="font-size: 0.85rem; color: #64748B;">Nessun ospite registrato al momento.</p>`;
-                return;
-            }
-
-            let html = `<div class="table-responsive"><table><thead><tr><th>Studente</th><th>Stanza</th><th>Ospite</th><th>Documento</th><th>Ingresso</th><th>Uscita</th></tr></thead><tbody>`;
-            const oraCorrente = new Date();
-
-            data.forEach(ospite => {
-                let senzaUscita = !ospite.orario_uscita_previsto;
-                if (!senzaUscita && new Date(ospite.orario_uscita_previsto) < oraCorrente) senzaUscita = true;
-
-                let dIngresso = new Date(ospite.created_at).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
-                let dUscita = ospite.orario_uscita_previsto ? new Date(ospite.orario_uscita_previsto).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' }) : '<span class="badge badge-danger">Verificare</span>';
-
-                html += `<tr class="${senzaUscita ? 'alert-row' : ''}">
-                    <td><strong>${ospite.residente_nome || 'N/A'}</strong></td><td>St. ${ospite.residente_stanza || 'N/A'}</td>
-                    <td>${ospite.nome || ''} ${ospite.cognome || ''}</td><td><small>${ospite.tipo_documento || 'N/A'}<br><b>${ospite.numero_documento || 'N/A'}</b></small></td>
-                    <td>${dIngresso}</td><td>${dUscita}</td></tr>`;
-            });
-            html += `</tbody></table></div>`;
-            container.innerHTML = html;
         }
 
         async function caricaResidentiEAssenze() {
             const container = document.getElementById('residentiTableContainer');
-            container.innerHTML = `<p style="font-size: 0.85rem; color: #64748B;">Caricamento dati residenti...</p>`;
+            container.innerHTML = `<p style="font-size: 0.85rem; color: #64748B;">Connessione a Supabase in corso...</p>`;
 
             try {
+                // Test chiamata tabella residenti
                 const resResidenti = await supabaseClient.from('residenti').select('*');
-                if (resResidenti.error) {
-                    throw new Error("Errore tabella residenti: " + resResidenti.error.message);
-                }
-                const residenti = resResidenti.data || [];
                 
+                if (resResidenti.error) {
+                    throw new Error("Tabella 'residenti' non trovata o bloccata: " + resResidenti.error.message);
+                }
+                
+                const residenti = resResidenti.data || [];
                 if (residenti.length === 0) {
-                    container.innerHTML = `<div class="alert-box">Nessun residente trovato nel database.</div>`;
+                    container.innerHTML = `<div class="alert-box">La tabella 'residenti' è vuota sul database! Inserisci dei dati.</div>`;
                     return;
                 }
 
+                // Test chiamata tabella assenze
                 const resAssenze = await supabaseClient.from('assenze').select('*');
                 const assenze = resAssenze.error ? [] : (resAssenze.data || []);
                 const oraCorrente = new Date();
@@ -275,11 +220,13 @@
                         fineAssenza: assenzaAttiva ? assenzaAttiva.fine : null
                     };
                 });
+                
                 datiUnificatiCache.sort((a, b) => String(a.stanza).localeCompare(String(b.stanza), undefined, {numeric: true}));
                 applicaFiltriResidenti();
 
             } catch (err) {
-                container.innerHTML = `<div class="alert-box">⚠️ ${err.message}</div>`;
+                console.error(err);
+                container.innerHTML = `<div class="alert-box"><strong>⚠️ ERRORE DI CARICAMENTO:</strong><br>${err.message}<br><br><em>Verifica su Supabase che la tabella 'residenti' esista e abbia i permessi attivi.</em></div>`;
             }
         }
 
